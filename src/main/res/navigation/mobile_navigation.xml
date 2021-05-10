@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.supremenews.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_sports"
+        android:name="com.example.supremenews.ui.categories.sports.SportsFragment"
+        android:label="@string/menu_gallery"
+        tools:layout="@layout/fragment_sports" />
+
+    <fragment
+        android:id="@+id/nav_politics"
+        android:name="com.example.supremenews.ui.categories.politics.PoliticsFragement"
+        android:label="@string/menu_slideshow"
+        tools:layout="@layout/fragment_politics" />
+    <fragment
+        android:id="@+id/nav_india"
+        android:name="com.example.supremenews.ui.categories.india.IndiaFragement"
+        android:label="@string/menu_notification"
+        tools:layout="@layout/fragment_India" />
+    <fragment
+        android:id="@+id/nav_bollywood"
+        android:name="com.example.supremenews.ui.categories.bollywood.BollywoodFragment"
+        android:label="bollywood_fragment"
+        tools:layout="@layout/bollywood_fragment" />
+    <fragment
+        android:id="@+id/nav_corona"
+        android:name="com.example.supremenews.ui.categories.corona.CoronaFragment"
+        android:label="corona_fragment"
+        tools:layout="@layout/corona_fragment" />
+    <fragment
+        android:id="@+id/nav_cricket"
+        android:name="com.example.supremenews.ui.categories.cricket.CricketFragment"
+        android:label="cricket_fragment"
+        tools:layout="@layout/cricket_fragment" />
+    <fragment
+        android:id="@+id/nav_whatsapp"
+        android:name="com.example.supremenews.ui.categories.whatsapp.WhatsappFragment"
+        android:label="whatsapp_fragment"
+        tools:layout="@layout/whatsapp_fragment" />
+    <fragment
+        android:id="@+id/nav_world"
+        android:name="com.example.supremenews.ui.categories.world.WorldFragment"
+        tools:layout="@layout/world_fragment" />
+</navigation>
