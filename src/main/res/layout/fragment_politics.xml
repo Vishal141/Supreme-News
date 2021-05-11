@@ -5,11 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.categories.politics.PoliticsFragement">
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/politics_recycler_view"
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/politics_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/p_loading_animation"

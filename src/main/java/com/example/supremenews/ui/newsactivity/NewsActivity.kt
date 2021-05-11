@@ -1,5 +1,6 @@
 package com.example.supremenews.ui.newsactivity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -17,18 +18,27 @@ class NewsActivity : AppCompatActivity() {
     private lateinit var subtitle:TextView
     private lateinit var detail:TextView
     private lateinit var newsImage:ImageView
+    private lateinit var shareImage:ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_news)
 
-        var news:News = Global.news
+        val news:News = Global.news
 
         publishedDate = findViewById(R.id.published_date)
         title = findViewById(R.id.title)
         subtitle = findViewById(R.id.news_subtitle)
         detail = findViewById(R.id.detail_news)
         newsImage = findViewById(R.id.image_news)
+        shareImage = findViewById(R.id.image_share)
+
+        shareImage.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type = "text/plain"
+            intent.putExtra(Intent.EXTRA_TEXT,"link of apk")
+            startActivity(Intent.createChooser(intent,"Share Via"))
+        }
 
         setNews(news)
 

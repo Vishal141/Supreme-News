@@ -6,11 +6,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.categories.whatsapp.WhatsappFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/whatsapp_recycler_view"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/whatsapp_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/w_loading_animation"
