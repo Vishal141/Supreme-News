@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.supremenews.R;
+import com.example.supremenews.asynctasks.DownloadAsyncTask;
 import com.example.supremenews.models.Global;
 import com.example.supremenews.models.News;
 import com.example.supremenews.ui.newsactivity.NewsActivity;
@@ -70,32 +71,8 @@ public class HomeNewsAdapter extends RecyclerView.Adapter<HomeNewsAdapter.ViewHo
         });
 
         holder.image_download.setOnClickListener(v -> {
-            try{
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                    File dataDir = mContext.getDataDir();
-                    String downloadPath = dataDir.getAbsolutePath().toString()+File.separator+"download";
-                    File downloadDir = new File(downloadPath);
-                    if(!downloadDir.exists())
-                    {
-                        if(downloadDir.mkdir())
-                            System.out.println("created");
-                    }
-
-                    File file = new File(downloadDir+File.separator+news.get_id()+".ser");
-                    if(!file.exists()){
-                        if(file.createNewFile())
-                            System.out.println("created");
-                    }
-
-                    ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(file));
-                    os.writeObject(news);
-                    os.flush();
-                    os.close();
-                    Toast.makeText(mContext,"download successful",Toast.LENGTH_LONG).show();
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+            DownloadAsyncTask task = new DownloadAsyncTask(mContext,news);
+            task.execute();
         });
 
     }
