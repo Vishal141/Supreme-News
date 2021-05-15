@@ -11,6 +11,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.airbnb.lottie.LottieAnimationView
 import com.example.supremenews.Adapters.HomeNewsAdapter
 import com.example.supremenews.R
@@ -19,7 +20,7 @@ import com.example.supremenews.models.News
 class IndiaFragement : Fragment() {
 
     private lateinit var viewModel: IndiaViewModel
-
+    private lateinit var refreshLayout: SwipeRefreshLayout
     private lateinit var india_recycler_view:RecyclerView
     private lateinit var adapter:HomeNewsAdapter
 
@@ -35,7 +36,7 @@ class IndiaFragement : Fragment() {
 
         india_recycler_view = root.findViewById(R.id.india_recycler_view)
         loadingAnimation = root.findViewById(R.id.i_loading_animation)
-
+        refreshLayout = root.findViewById(R.id.refresh_layout)
         return root;
     }
 
@@ -48,10 +49,15 @@ class IndiaFragement : Fragment() {
         adapter = HomeNewsAdapter(activity,mNews)
         india_recycler_view.adapter = adapter
 
-        mNews!!.observe(activity as LifecycleOwner,
-            Observer<List<News>> {
+        mNews!!.observe(requireActivity(), Observer<List<News>> {
                 adapter.setmNews(mNews)
             })
+
+        refreshLayout.setOnRefreshListener {
+            println("refresh")
+            refreshLayout.isRefreshing = false
+            adapter!!.setmNews(viewModel.refresh(loadingAnimation))
+        }
 
     }
 

@@ -23,4 +23,11 @@ class BollywoodViewModel : ViewModel() {
         }
         return mNews
     }
+
+    fun refresh(loadingAnimation: LottieAnimationView):LiveData<List<News>>{
+        viewModelScope.launch(Dispatchers.IO){
+            mNews.postValue(AllNewsAsyncTask(loadingAnimation).execute(NEWS_URL).get())
+        }
+        return mNews;
+    }
 }

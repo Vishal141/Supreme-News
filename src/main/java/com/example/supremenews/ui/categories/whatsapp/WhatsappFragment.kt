@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.airbnb.lottie.LottieAnimationView
 import com.example.supremenews.Adapters.HomeNewsAdapter
 import com.example.supremenews.R
@@ -18,7 +19,7 @@ import com.example.supremenews.models.News
 class WhatsappFragment : Fragment() {
 
     private lateinit var viewModel: WhatsappViewModel
-
+    private lateinit var refreshLayout: SwipeRefreshLayout
     private lateinit var recyclerView: RecyclerView
     private lateinit var loadingAnimation: LottieAnimationView
     private var adapter: HomeNewsAdapter?=null
@@ -34,7 +35,7 @@ class WhatsappFragment : Fragment() {
 
         recyclerView = root.findViewById(R.id.whatsapp_recycler_view)
         loadingAnimation = root.findViewById(R.id.w_loading_animation)
-
+        refreshLayout = root.findViewById(R.id.refresh_layout)
         return root
     }
 
@@ -50,6 +51,12 @@ class WhatsappFragment : Fragment() {
         mNews!!.observe(requireActivity(), Observer {
             adapter!!.setmNews(mNews)
         })
+
+        refreshLayout.setOnRefreshListener {
+            println("refresh")
+            refreshLayout.isRefreshing = false
+            adapter!!.setmNews(viewModel.refresh(loadingAnimation))
+        }
     }
 
 }

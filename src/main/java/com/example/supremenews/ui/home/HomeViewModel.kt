@@ -25,4 +25,11 @@ class HomeViewModel : ViewModel() {
         }
         return this.mNews
     }
+
+    fun refresh(loadingAnimation: LottieAnimationView):LiveData<List<News>>{
+        viewModelScope.launch(Dispatchers.IO){
+            mNews.postValue(AllNewsAsyncTask(loadingAnimation).execute(ALL_NEWS_URL).get())
+        }
+        return mNews;
+    }
 }

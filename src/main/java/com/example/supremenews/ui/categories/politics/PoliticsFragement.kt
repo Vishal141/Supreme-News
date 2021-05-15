@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.airbnb.lottie.LottieAnimationView
 import com.example.supremenews.Adapters.HomeNewsAdapter
 import com.example.supremenews.R
@@ -18,7 +19,7 @@ import com.example.supremenews.models.News
 class PoliticsFragement : Fragment() {
 
     private lateinit var viewModel: PoliticsViewModel
-
+    private lateinit var refreshLayout: SwipeRefreshLayout
     private lateinit var recyclerView: RecyclerView
     private lateinit var loadingAnimation:LottieAnimationView
     private var adapter:HomeNewsAdapter?=null
@@ -34,7 +35,7 @@ class PoliticsFragement : Fragment() {
 
         recyclerView = root.findViewById(R.id.politics_recycler_view)
         loadingAnimation = root.findViewById(R.id.p_loading_animation)
-
+        refreshLayout = root.findViewById(R.id.refresh_layout)
         return root
     }
 
@@ -50,5 +51,11 @@ class PoliticsFragement : Fragment() {
         mNews!!.observe(requireActivity(), Observer {
             adapter!!.setmNews(mNews)
         })
+
+        refreshLayout.setOnRefreshListener {
+            println("refresh")
+            refreshLayout.isRefreshing = false
+            adapter!!.setmNews(viewModel.refresh(loadingAnimation))
+        }
     }
 }

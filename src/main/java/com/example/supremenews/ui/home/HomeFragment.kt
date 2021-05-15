@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.airbnb.lottie.LottieAnimationView
 import com.example.supremenews.Adapters.CategoryAdapter
 import com.example.supremenews.Adapters.HomeNewsAdapter
@@ -21,7 +22,7 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
-
+    private lateinit var refreshLayout: SwipeRefreshLayout
     private lateinit var homeNewsRecyclerView: RecyclerView
     private lateinit var homeNewsAdapter:HomeNewsAdapter
 
@@ -40,7 +41,7 @@ class HomeFragment : Fragment() {
 
         homeNewsRecyclerView = root.findViewById(R.id.home_recycler_view);
         loadingAnimation = root.findViewById(R.id.h_loading_animation);
-
+        refreshLayout = root.findViewById(R.id.refresh_layout)
         return root
     }
 
@@ -53,5 +54,12 @@ class HomeFragment : Fragment() {
         mNews!!.observe(requireActivity(), Observer {
             homeNewsAdapter.setmNews(mNews)
         })
+
+
+        refreshLayout.setOnRefreshListener {
+            println("refresh")
+            refreshLayout.isRefreshing = false
+            homeNewsAdapter.setmNews(homeViewModel.refresh(loadingAnimation))
+        }
     }
 }

@@ -40,6 +40,7 @@
                     android:text="Supreme News"
                     android:layout_toEndOf="@+id/image_back"
                     android:textStyle="bold"
+                    android:textColor="@color/black"
                     />
 
                 <ImageView
@@ -98,20 +99,10 @@
                />
 
            <TextView
-               android:id="@+id/news_subtitle"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:layout_below="@id/image_news"
-               android:layout_margin="10dp"
-               android:text="Subtitle of news"
-               android:maxLines="20"
-               />
-
-           <TextView
                android:id="@+id/detail_news"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:layout_below="@+id/news_subtitle"
+               android:layout_below="@+id/image_news"
                android:layout_margin="10dp"
                android:text="Detail of news"
                android:maxLines="500"

@@ -10,18 +10,16 @@ import com.example.supremenews.models.News
 import com.example.supremenews.models.NewsArray
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 
-class AllNewsAsyncTask(val loadingAnimation: LottieAnimationView): AsyncTask<String, Void,ArrayList<News>>() {
+class AllNewsAsyncTask(val loadingAnimation: LottieAnimationView): AsyncTask<String, Void,List<News>>() {
 
-    private var mNews:ArrayList<News>
-    init {
-        mNews = ArrayList()
-    }
+    private var mNews:ArrayList<News> = ArrayList()
 
     override fun onPreExecute() {
         //super.onPreExecute()
@@ -32,7 +30,7 @@ class AllNewsAsyncTask(val loadingAnimation: LottieAnimationView): AsyncTask<Str
         println("on preExecute")
     }
 
-    override fun doInBackground(vararg params: String?): ArrayList<News>? {
+    override fun doInBackground(vararg params: String?): List<News>? {
         try {
             val url = URL(params[0])
             val httpConnection:HttpURLConnection = url.openConnection() as HttpURLConnection
@@ -41,9 +39,9 @@ class AllNewsAsyncTask(val loadingAnimation: LottieAnimationView): AsyncTask<Str
             println(response)
             val gson = GsonBuilder().setLenient().create()
             val allNews:NewsArray = gson.fromJson(response,NewsArray::class.java)
-            for(news:News in allNews.newsBulk){
-                mNews.add(news)
-            }
+
+            if(allNews.newsBulk!=null)
+                return allNews.newsBulk
 
         }catch (e:Exception){
             e.printStackTrace()
@@ -51,7 +49,7 @@ class AllNewsAsyncTask(val loadingAnimation: LottieAnimationView): AsyncTask<Str
         return mNews
     }
 
-    override fun onPostExecute(result: ArrayList<News>?) {
+    override fun onPostExecute(result: List<News>?) {
         loadingAnimation.pauseAnimation();
         loadingAnimation.visibility = View.GONE
         super.onPostExecute(result)

@@ -15,12 +15,19 @@ class IndiaViewModel : ViewModel() {
     private var mNews:MutableLiveData<List<News>> = MutableLiveData<List<News>>()
 
     fun getNews(loadingAnimation:LottieAnimationView):LiveData<List<News>>{
-        if(mNews.value==null){
-            mNews.value  = ArrayList<News>()
-            viewModelScope.launch(Dispatchers.IO){
+        if(mNews.value==null) {
+            mNews.value = ArrayList<News>()
+            viewModelScope.launch(Dispatchers.IO) {
                 mNews.postValue(AllNewsAsyncTask(loadingAnimation).execute(NEWS_URL).get())
             }
         }
         return mNews
+    }
+
+    fun refresh(loadingAnimation: LottieAnimationView):LiveData<List<News>>{
+        viewModelScope.launch(Dispatchers.IO){
+            mNews.postValue(AllNewsAsyncTask(loadingAnimation).execute(NEWS_URL).get())
+        }
+        return mNews;
     }
 }

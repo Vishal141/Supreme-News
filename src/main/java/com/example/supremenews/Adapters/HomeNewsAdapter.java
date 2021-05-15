@@ -2,18 +2,16 @@ package com.example.supremenews.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.os.Environment;
-import android.os.Parcelable;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,12 +22,8 @@ import com.example.supremenews.models.Global;
 import com.example.supremenews.models.News;
 import com.example.supremenews.ui.newsactivity.NewsActivity;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Date;
+import java.time.LocalDateTime;
+
 import java.util.List;
 
 public class HomeNewsAdapter extends RecyclerView.Adapter<HomeNewsAdapter.ViewHolder> {
@@ -59,9 +53,10 @@ public class HomeNewsAdapter extends RecyclerView.Adapter<HomeNewsAdapter.ViewHo
         News news = mNews.getValue().get(position);
         String date = news.getPublished_at().substring(0,10);
         String time = news.getPublished_at().substring(11,16);
-        holder.date.setText(date + " "+ time);
+        //System.out.println(date);
+        //System.out.println(time);
+        holder.date.setText(getTimeDiff(date,time));
         holder.title.setText(news.getTitle());
-        holder.subtitle.setText(news.getSubtitle());
         Glide.with(mContext).load(news.getImage()).into(holder.newsImage);
 
         holder.topRel.setOnClickListener(v -> {
@@ -74,7 +69,36 @@ public class HomeNewsAdapter extends RecyclerView.Adapter<HomeNewsAdapter.ViewHo
             DownloadAsyncTask task = new DownloadAsyncTask(mContext,news);
             task.execute();
         });
+    }
 
+    public static String getTimeDiff(String date, String time){
+        String ans="just now";
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O){
+            LocalDateTime dateTime = null;
+            dateTime = LocalDateTime.now();
+            int yy = Integer.parseInt(date.substring(0,4));
+            int mm = Integer.parseInt(date.substring(5,7));
+            int dd = Integer.parseInt(date.substring(8));
+            int DD = dateTime.getDayOfMonth()-dd;
+            int MM = dateTime.getMonthValue()-mm;
+            int YY = dateTime.getYear()-yy;
+            if(YY!=0)
+                return YY+" years ago";
+            if(MM!=0)
+                return MM+" months ago";
+            if(DD!=0)
+                return DD+" days ago";
+
+            int hh = dateTime.getHour() - Integer.parseInt(time.substring(0,2));
+            if(hh!=0)
+                return hh+" hours ago";
+
+            int mi = dateTime.getMinute() - Integer.parseInt(time.substring(3));
+            if(mi!=0)
+                return mi+" minutes ago";
+        }
+
+        return ans;
     }
 
     @Override
@@ -83,7 +107,7 @@ public class HomeNewsAdapter extends RecyclerView.Adapter<HomeNewsAdapter.ViewHo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView date,title,subtitle;
+        TextView date,title;
         ImageView newsImage,image_like,image_download;
         RelativeLayout topRel;
 
@@ -91,7 +115,6 @@ public class HomeNewsAdapter extends RecyclerView.Adapter<HomeNewsAdapter.ViewHo
             super(itemView);
             date = itemView.findViewById(R.id.published_date);
             title = itemView.findViewById(R.id.news_title);
-            subtitle = itemView.findViewById(R.id.news_subtitle);
             newsImage = itemView.findViewById(R.id.news_image);
             image_like = itemView.findViewById(R.id.image_like);
             topRel = itemView.findViewById(R.id.top_rel);

@@ -4,8 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -16,8 +14,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.supremenews.ui.downloaded.Downloaded
-import com.example.supremenews.ui.notification.Notifications
-import com.example.supremenews.ui.search.SearchActivity
 import de.hdodenhof.circleimageview.CircleImageView
 
 class MainDrawerActivity : AppCompatActivity() {
@@ -49,8 +45,6 @@ class MainDrawerActivity : AppCompatActivity() {
         val handler = Handler()
         handler.postDelayed({
             findViewById<CircleImageView>(R.id.downloaded_icon).setOnClickListener { v -> gotoDownloaded(v!!) }
-            findViewById<CircleImageView>(R.id.notifications_icon).setOnClickListener { v -> gotoNotifications(v!!) }
-            findViewById<ImageView>(R.id.image_search).setOnClickListener{ v-> startActivity(Intent(applicationContext,SearchActivity::class.java))}
         },5000)
     }
 
@@ -61,9 +55,5 @@ class MainDrawerActivity : AppCompatActivity() {
 
     fun gotoDownloaded(view: View){
         startActivity(Intent(applicationContext,Downloaded::class.java))
-    }
-
-    fun gotoNotifications(view: View){
-        startActivity(Intent(applicationContext, Notifications::class.java))
     }
 }

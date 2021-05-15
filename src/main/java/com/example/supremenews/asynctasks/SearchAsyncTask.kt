@@ -18,7 +18,8 @@ class SearchAsyncTask(var mNews: MutableLiveData<List<News>>) : AsyncTask<String
             val url = URL(SEARCH_URL+item)
             val httpConnection:HttpURLConnection = url.openConnection() as HttpURLConnection
 
-            var response:String = httpConnection.inputStream.bufferedReader().readText()
+            val response:String = httpConnection.inputStream.bufferedReader().readText()
+            println(response)
             val gson = Gson()
             val newsArray:NewsArray = gson.fromJson(response,NewsArray::class.java)
             if(newsArray.newsBulk!=null)
