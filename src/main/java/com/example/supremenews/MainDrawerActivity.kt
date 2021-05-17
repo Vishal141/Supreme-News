@@ -1,5 +1,6 @@
 package com.example.supremenews
 
+import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -13,8 +14,10 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.example.supremenews.notification.NotificationReceiver
 import com.example.supremenews.ui.downloaded.Downloaded
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.activity_main_drawer.*
 
 class MainDrawerActivity : AppCompatActivity() {
 
@@ -55,5 +58,12 @@ class MainDrawerActivity : AppCompatActivity() {
 
     fun gotoDownloaded(view: View){
         startActivity(Intent(applicationContext,Downloaded::class.java))
+    }
+
+    override fun onStop() {
+        var intent = Intent(this,NotificationReceiver::class.java)
+        var pIntent = PendingIntent.getBroadcast(this,0,intent,0)
+        
+        super.onStop()
     }
 }
