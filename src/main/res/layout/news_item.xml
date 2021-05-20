@@ -58,8 +58,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
                     android:layout_margin="10dp"
-                    android:drawableLeft="@drawable/ic_date"
-                    android:text="2021/05/09" />
+                    android:text="2021/05/09"
+                    app:drawableStartCompat="@drawable/ic_date" />
 
                 <ImageView
                     android:id="@+id/image_like"

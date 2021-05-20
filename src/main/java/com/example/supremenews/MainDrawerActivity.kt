@@ -1,10 +1,15 @@
 package com.example.supremenews
 
+import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.media.Image
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.widget.ImageView
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -18,6 +23,7 @@ import com.example.supremenews.notification.NotificationReceiver
 import com.example.supremenews.ui.downloaded.Downloaded
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_main_drawer.*
+import java.util.*
 
 class MainDrawerActivity : AppCompatActivity() {
 
@@ -48,6 +54,7 @@ class MainDrawerActivity : AppCompatActivity() {
         val handler = Handler()
         handler.postDelayed({
             findViewById<CircleImageView>(R.id.downloaded_icon).setOnClickListener { v -> gotoDownloaded(v!!) }
+            findViewById<ImageView>(R.id.web_redirect).setOnClickListener{v -> redirectToWeb()}
         },5000)
     }
 
@@ -56,14 +63,26 @@ class MainDrawerActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    fun gotoDownloaded(view: View){
+    private fun gotoDownloaded(view: View){
         startActivity(Intent(applicationContext,Downloaded::class.java))
     }
 
+    private fun redirectToWeb(){
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://supremenews.in"))
+        startActivity(intent)
+    }
+
     override fun onStop() {
-        var intent = Intent(this,NotificationReceiver::class.java)
-        var pIntent = PendingIntent.getBroadcast(this,0,intent,0)
-        
+        setAlarm()
         super.onStop()
+    }
+
+    private fun setAlarm() {
+        val intent = Intent(this,NotificationReceiver::class.java)
+        val pIntent = PendingIntent.getBroadcast(this,0,intent,0)
+        val alarmManager:AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val interval:Long = 15*60*1000
+        val calendar = Calendar.getInstance()
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.timeInMillis,interval,pIntent)
     }
 }

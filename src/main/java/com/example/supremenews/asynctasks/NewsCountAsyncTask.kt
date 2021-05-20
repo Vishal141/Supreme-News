@@ -10,26 +10,25 @@ import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 
-class SearchAsyncTask(var mNews: MutableLiveData<List<News>>) : AsyncTask<String,Void,Void>(){
-    private val SEARCH_URL = "http://supremenews.herokuapp.com/api/search/news?search="
-    override fun doInBackground(vararg params: String?): Void? {
+class NewsCountAsyncTask : AsyncTask<Void,Void,List<News>>(){
+    private val SEARCH_URL = "http://supremenews.herokuapp.com/api/news"
+    override fun doInBackground(vararg params: Void?): List<News>? {
         try {
-            val item = params[0];
-            val url = URL(SEARCH_URL+item)
+            val url = URL(SEARCH_URL)
             val httpConnection:HttpURLConnection = url.openConnection() as HttpURLConnection
 
             val response:String = httpConnection.inputStream.bufferedReader().readText()
-            println(response)
+           // println(response)
             val gson = Gson()
             val newsArray:NewsArray = gson.fromJson(response,NewsArray::class.java)
-            if(newsArray.newsBulk!=null)
-               mNews.postValue(newsArray.newsBulk)
+            if(newsArray!=null && newsArray.newsBulk!=null)
+                newsArray.newsBulk
 
         }catch (e:Exception){
             e.printStackTrace()
         }
 
-        return null
+        return ArrayList();
     }
 
 }

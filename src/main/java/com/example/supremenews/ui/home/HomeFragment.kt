@@ -1,5 +1,6 @@
 package com.example.supremenews.ui.home
 
+import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -53,13 +54,20 @@ class HomeFragment : Fragment() {
         homeNewsRecyclerView.adapter = homeNewsAdapter
         mNews!!.observe(requireActivity(), Observer {
             homeNewsAdapter.setmNews(mNews)
+            setNewsCount(mNews!!.value!!.size)
         })
-
 
         refreshLayout.setOnRefreshListener {
             println("refresh")
             refreshLayout.isRefreshing = false
-            homeNewsAdapter.setmNews(homeViewModel.refresh(loadingAnimation))
+            val tempNews:LiveData<List<News>> = homeViewModel.refresh(loadingAnimation)
+            homeNewsAdapter.setmNews(tempNews)
+            setNewsCount(tempNews.value!!.size)
         }
+    }
+
+    private fun setNewsCount(count:Int){
+        val sp = requireActivity().getSharedPreferences("MY_PREP",MODE_PRIVATE)
+        sp.edit().putInt("NEWS_COUNT",count).apply()
     }
 }

@@ -3,6 +3,7 @@ package com.example.supremenews.Adapters;
 import android.content.Context;
 import android.content.Intent;
 
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.supremenews.R;
 import com.example.supremenews.asynctasks.DownloadAsyncTask;
+import com.example.supremenews.asynctasks.LikeAsyncTask;
 import com.example.supremenews.models.Global;
 import com.example.supremenews.models.News;
 import com.example.supremenews.ui.newsactivity.NewsActivity;
@@ -69,6 +71,33 @@ public class HomeNewsAdapter extends RecyclerView.Adapter<HomeNewsAdapter.ViewHo
             DownloadAsyncTask task = new DownloadAsyncTask(mContext,news);
             task.execute();
         });
+
+        holder.image_like.setOnClickListener(v->{
+            if(isLike(news.get_id())){
+                holder.image_like.setImageResource(R.drawable.ic_like);
+                like(news.get_id(),false);
+            }else{
+                holder.image_like.setImageResource(R.drawable.ic_like_fill);
+                like(news.get_id(),true);
+                LikeAsyncTask task = new LikeAsyncTask();
+                task.execute(news.get_id());
+            }
+        });
+    }
+
+    public void like(String id,boolean Like){
+        SharedPreferences sp = mContext.getSharedPreferences("MY_PREP",Context.MODE_PRIVATE);
+        if(Like){
+            sp.edit().putBoolean(id,true).apply();
+        }else{
+            if(sp.contains(id))
+                sp.edit().remove(id).apply();
+        }
+    }
+
+    public boolean isLike(String id){
+        SharedPreferences sp = mContext.getSharedPreferences("MY_PREP",Context.MODE_PRIVATE);
+        return sp.contains(id);
     }
 
     public static String getTimeDiff(String date, String time){

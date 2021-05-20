@@ -27,6 +27,7 @@
                     android:id="@+id/supremeNewsIcon"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
+                    android:layout_centerVertical="true"
                     android:src="@drawable/supreme_news_icon_2" />
 
                 <TextView
@@ -35,7 +36,16 @@
                     android:layout_margin="10dp"
                     android:text="Supreme News"
                     android:textColor="@color/black"
+                    android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/supremeNewsIcon"
+                    />
+
+                <ImageView
+                    android:id="@+id/web_redirect"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/web_redirect_icon"
                     />
 
             </RelativeLayout>
