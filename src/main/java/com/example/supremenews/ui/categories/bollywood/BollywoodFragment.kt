@@ -15,6 +15,8 @@ import com.airbnb.lottie.LottieAnimationView
 import com.example.supremenews.Adapters.HomeNewsAdapter
 import com.example.supremenews.R
 import com.example.supremenews.models.News
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
 
 class BollywoodFragment : Fragment() {
 
@@ -23,7 +25,7 @@ class BollywoodFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var loadingAnimation: LottieAnimationView
     private var adapter: HomeNewsAdapter?=null
-
+    private lateinit var mAdView:AdView
     private var mNews: LiveData<List<News>>?=null
 
     override fun onCreateView(
@@ -36,6 +38,7 @@ class BollywoodFragment : Fragment() {
         recyclerView = root.findViewById(R.id.bollywood_recycler_view)
         loadingAnimation = root.findViewById(R.id.b_loading_animation)
         refreshLayout = root.findViewById(R.id.refresh_layout)
+        mAdView = root.findViewById(R.id.adView)
         return root
     }
 
@@ -57,5 +60,9 @@ class BollywoodFragment : Fragment() {
             refreshLayout.isRefreshing = false
             adapter!!.setmNews(viewModel.refresh(loadingAnimation))
         }
+
+        val adRequest:AdRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
+
     }
 }

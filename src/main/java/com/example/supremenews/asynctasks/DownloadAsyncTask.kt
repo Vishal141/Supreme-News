@@ -14,19 +14,19 @@ class DownloadAsyncTask(val mContext:Context,val news:News):AsyncTask<Void,Void,
     override fun doInBackground(vararg params: Void?): Void? {
         try{
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                val dataDir = mContext.getDataDir();
-                val downloadPath = dataDir.getAbsolutePath().toString()+File.separator+"download";
+                val dataDir = mContext.dataDir;
+                val downloadPath = dataDir.absolutePath.toString()+File.separator+"download";
                 val downloadDir = File(downloadPath);
                 if(!downloadDir.exists())
                 {
                     if(downloadDir.mkdir())
-                        System.out.println("created");
+                        println("created");
                 }
 
                 val file = File(downloadPath+File.separator+news.get_id()+".ser");
                 if(!file.exists()){
                     if(file.createNewFile())
-                        System.out.println("created");
+                        println("created");
                 }
 
                 val os = ObjectOutputStream(FileOutputStream(file));

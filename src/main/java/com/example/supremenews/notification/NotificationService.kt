@@ -39,7 +39,7 @@ class NotificationService: Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if(isShow())
+        if(isShow() && newsList!!.isNotEmpty())
         {
             for(i in 0..(newCount-prevCount))
             {

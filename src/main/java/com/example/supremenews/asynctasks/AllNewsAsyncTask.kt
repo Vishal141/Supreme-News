@@ -36,7 +36,7 @@ class AllNewsAsyncTask(val loadingAnimation: LottieAnimationView): AsyncTask<Str
             val httpConnection:HttpURLConnection = url.openConnection() as HttpURLConnection
             httpConnection.requestMethod = "GET"
             val response = httpConnection.inputStream.bufferedReader().readText()
-            println(response)
+          //  println(response)
             val gson = GsonBuilder().setLenient().create()
             val allNews:NewsArray = gson.fromJson(response,NewsArray::class.java)
 

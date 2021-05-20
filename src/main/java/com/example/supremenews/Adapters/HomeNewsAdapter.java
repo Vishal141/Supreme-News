@@ -1,5 +1,6 @@
 package com.example.supremenews.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
@@ -23,6 +24,13 @@ import com.example.supremenews.asynctasks.LikeAsyncTask;
 import com.example.supremenews.models.Global;
 import com.example.supremenews.models.News;
 import com.example.supremenews.ui.newsactivity.NewsActivity;
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
 import java.time.LocalDateTime;
 
@@ -32,6 +40,10 @@ public class HomeNewsAdapter extends RecyclerView.Adapter<HomeNewsAdapter.ViewHo
 
     private Context mContext;
     private LiveData<List<News>> mNews;
+    private InterstitialAd mAdView;
+    private AdRequest mAdRequest;
+
+    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
 
     public HomeNewsAdapter(Context mContext, LiveData<List<News>> mNews) {
         this.mContext = mContext;
@@ -74,7 +86,7 @@ public class HomeNewsAdapter extends RecyclerView.Adapter<HomeNewsAdapter.ViewHo
 
         holder.image_like.setOnClickListener(v->{
             if(isLike(news.get_id())){
-                holder.image_like.setImageResource(R.drawable.ic_like);
+                holder.image_like.setImageResource(R.drawable.ic_thumb_up);
                 like(news.get_id(),false);
             }else{
                 holder.image_like.setImageResource(R.drawable.ic_like_fill);
