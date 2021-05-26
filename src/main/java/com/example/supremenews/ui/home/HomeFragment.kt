@@ -1,5 +1,6 @@
 package com.example.supremenews.ui.home
 
+import android.app.Activity
 import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -27,6 +28,8 @@ class HomeFragment : Fragment() {
     private lateinit var mAdView:AdView
     private lateinit var loadingAnimation:LottieAnimationView
 
+    private lateinit var activity:Activity
+
     private var mNews:LiveData<List<News>>? = null
 
     override fun onCreateView(
@@ -46,6 +49,7 @@ class HomeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        activity = requireActivity()
 
         homeNewsRecyclerView.layoutManager = LinearLayoutManager(activity)
         mNews = homeViewModel.getAllNews(loadingAnimation)
@@ -69,7 +73,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setNewsCount(count:Int){
-        val sp = requireActivity().getSharedPreferences("MY_PREP",MODE_PRIVATE)
+        val sp = activity.getSharedPreferences("MY_PREP",MODE_PRIVATE)
         sp.edit().putInt("NEWS_COUNT",count).apply()
     }
 }

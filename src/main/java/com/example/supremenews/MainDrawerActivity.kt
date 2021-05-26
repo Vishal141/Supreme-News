@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -34,6 +35,8 @@ class MainDrawerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main_drawer)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+       // cancelAlarm()
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
@@ -72,8 +75,14 @@ class MainDrawerActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    override fun onStart() {
+        cancelAlarm()
+        super.onStart()
+    }
+
     override fun onStop() {
         setAlarm()
+       // Toast.makeText(applicationContext,"alarm set",Toast.LENGTH_LONG).show()
         super.onStop()
     }
 
@@ -81,8 +90,20 @@ class MainDrawerActivity : AppCompatActivity() {
         val intent = Intent(this,NotificationReceiver::class.java)
         val pIntent = PendingIntent.getBroadcast(this,0,intent,0)
         val alarmManager:AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val interval:Long = 15*60*1000
+        val interval:Long = 1*60*1000
         val calendar = Calendar.getInstance()
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.timeInMillis,interval,pIntent)
+    }
+
+    private fun cancelAlarm(){
+        try {
+            val intent = Intent(this,NotificationReceiver::class.java)
+            val pIntent = PendingIntent.getBroadcast(this,0,intent,0)
+            val alarmManager:AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmManager.cancel(pIntent)
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+      //  Toast.makeText(applicationContext,"alarm cancel",Toast.LENGTH_LONG).show()
     }
 }

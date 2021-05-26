@@ -7,6 +7,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -39,11 +40,13 @@ class NotificationService: Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if(isShow() && newsList!!.isNotEmpty())
+        val result = isShow()
+        showNotification("$result : $newCount : $prevCount","")
+        if(result)
         {
-            for(i in 0..(newCount-prevCount))
+            for(i in 0 until newCount-prevCount)
             {
-                val news:News = newsList!!.get(i)
+                val news:News = newsList!![i]
                 showNotification(news.title,news.image)
                 val sp:SharedPreferences = getSharedPreferences("MY_PREP", Context.MODE_PRIVATE);
                 sp.edit().putInt("NEWS_COUNT",newCount).apply()
@@ -58,12 +61,14 @@ class NotificationService: Service() {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         val pIntent = PendingIntent.getActivity(this,1,intent,0)
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-        builder.setSmallIcon(R.drawable.supreme_news_icon_2)
+        builder.setSmallIcon(getNotificationIcon())
             .setContentTitle(title)
+            .setContentIntent(pIntent)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(title))
+            .setAutoCancel(true)
 
         try {
-            val bitmap = BitmapFactory.decodeFile(url)
-            builder.setLargeIcon(bitmap)
+            builder.setLargeIcon(BitmapFactory.decodeResource(applicationContext.resources,R.drawable.supreme_news_icon_2))
         }catch (e:Exception){
             e.printStackTrace()
         }
@@ -80,12 +85,21 @@ class NotificationService: Service() {
         manager.notify(System.currentTimeMillis().toInt(),builder.build())
     }
 
+    private fun getNotificationIcon():Int {
+        val useWhiteIcon:Boolean = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
+        if(useWhiteIcon)
+            return R.mipmap.supreme_news_transparent_2
+        return R.mipmap.ic_launcher
+    }
+
+
+
     private fun isShow():Boolean
     {
         val sp:SharedPreferences = getSharedPreferences("MY_PREP", Context.MODE_PRIVATE);
-        newCount = sp.getInt("NEWS_COUNT",0)
+        prevCount = sp.getInt("NEWS_COUNT",0)
         newsList = NewsCountAsyncTask().execute().get()
-        prevCount = newsList!!.size
+        newCount = newsList!!.size
         return !(newCount==prevCount)
     }
 }

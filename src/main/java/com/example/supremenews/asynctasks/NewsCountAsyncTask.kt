@@ -19,11 +19,12 @@ class NewsCountAsyncTask : AsyncTask<Void,Void,List<News>>(){
             val httpConnection:HttpURLConnection = url.openConnection() as HttpURLConnection
             httpConnection.requestMethod = "GET"
             val response:String = httpConnection.inputStream.bufferedReader().readText()
-           // println(response)
+            //println("count")
+            //println(response)
             val gson = GsonBuilder().setLenient().create()
             val newsArray:NewsArray = gson.fromJson(response,NewsArray::class.java)
             if(newsArray.newsBulk!=null)
-                newsArray.newsBulk
+                return newsArray.newsBulk
 
         }catch (e:Exception){
             e.printStackTrace()

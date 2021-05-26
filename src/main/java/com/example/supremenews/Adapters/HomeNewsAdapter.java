@@ -1,10 +1,10 @@
 package com.example.supremenews.Adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,16 +24,15 @@ import com.example.supremenews.asynctasks.LikeAsyncTask;
 import com.example.supremenews.models.Global;
 import com.example.supremenews.models.News;
 import com.example.supremenews.ui.newsactivity.NewsActivity;
-import com.google.android.gms.ads.AdError;
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.FullScreenContentCallback;
-import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 
+import java.util.Date;
 import java.util.List;
 
 public class HomeNewsAdapter extends RecyclerView.Adapter<HomeNewsAdapter.ViewHolder> {
@@ -65,12 +64,15 @@ public class HomeNewsAdapter extends RecyclerView.Adapter<HomeNewsAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         News news = mNews.getValue().get(position);
+        int l = news.getPublished_at().length();
         String date = news.getPublished_at().substring(0,10);
-        String time = news.getPublished_at().substring(11,16);
-        //System.out.println(date);
-        //System.out.println(time);
-        holder.date.setText(getTimeDiff(date,time));
+        String time = news.getPublished_at().substring(11,l-1);
+        holder.date.setText(getDate(date+" "+time));
         holder.title.setText(news.getTitle());
+        if(isLike(news.get_id())){
+            holder.image_like.setImageResource(R.drawable.ic_like_fill);
+        }
+        holder.numLike.setText(news.getLikes());
         Glide.with(mContext).load(news.getImage()).into(holder.newsImage);
 
         holder.topRel.setOnClickListener(v -> {
@@ -80,36 +82,49 @@ public class HomeNewsAdapter extends RecyclerView.Adapter<HomeNewsAdapter.ViewHo
         });
 
         holder.image_download.setOnClickListener(v -> {
-            DownloadAsyncTask task = new DownloadAsyncTask(mContext,news);
-            task.execute();
+            new Handler().post(()->{
+                DownloadAsyncTask task = new DownloadAsyncTask(mContext,news);
+                task.execute();
+            });
         });
 
         holder.image_like.setOnClickListener(v->{
-            if(isLike(news.get_id())){
-                holder.image_like.setImageResource(R.drawable.ic_thumb_up);
-                like(news.get_id(),false);
+            if(!isLike(news.get_id())){
+                holder.image_like.setImageResource(R.drawable.ic_like_fill);
+                like(news,holder.numLike);
             }else{
                 holder.image_like.setImageResource(R.drawable.ic_like_fill);
-                like(news.get_id(),true);
-                LikeAsyncTask task = new LikeAsyncTask();
-                task.execute(news.get_id());
             }
         });
     }
 
-    public void like(String id,boolean Like){
+    public void like(News news,TextView numLike){
         SharedPreferences sp = mContext.getSharedPreferences("MY_PREP",Context.MODE_PRIVATE);
-        if(Like){
-            sp.edit().putBoolean(id,true).apply();
-        }else{
-            if(sp.contains(id))
-                sp.edit().remove(id).apply();
+        sp.edit().putBoolean(news.get_id(),true).apply();
+        new Handler().post(()->{
+            LikeAsyncTask task = new LikeAsyncTask();
+            task.execute(news.get_id());
+        });
+        try {
+            int likes = Integer.parseInt(numLike.getText().toString());
+            numLike.setText(""+(likes+1));
+        }catch (Exception e){
+            numLike.setText("1");
+            e.printStackTrace();
         }
+
     }
 
     public boolean isLike(String id){
         SharedPreferences sp = mContext.getSharedPreferences("MY_PREP",Context.MODE_PRIVATE);
         return sp.contains(id);
+    }
+
+    private String getDate(String str){
+        Timestamp ts = Timestamp.valueOf(str);
+        DateFormat dateFormat = new SimpleDateFormat("MMM dd , yyyy");
+        Date date = new Date(ts.getTime());
+        return dateFormat.format(date);
     }
 
     public static String getTimeDiff(String date, String time){
@@ -148,7 +163,7 @@ public class HomeNewsAdapter extends RecyclerView.Adapter<HomeNewsAdapter.ViewHo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView date,title;
+        TextView date,title,numLike;
         ImageView newsImage,image_like,image_download;
         RelativeLayout topRel;
 
@@ -160,6 +175,7 @@ public class HomeNewsAdapter extends RecyclerView.Adapter<HomeNewsAdapter.ViewHo
             image_like = itemView.findViewById(R.id.image_like);
             topRel = itemView.findViewById(R.id.top_rel);
             image_download = itemView.findViewById(R.id.image_download);
+            numLike = itemView.findViewById(R.id.num_likes);
         }
     }
 }

@@ -9,6 +9,7 @@ import com.example.supremenews.R
 import com.example.supremenews.asynctasks.AllNewsAsyncTask
 import com.example.supremenews.models.News
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel() {

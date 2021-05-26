@@ -36,12 +36,15 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Downloaded Content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
                     android:layout_toRightOf="@+id/image_back"
-                    android:layout_margin="10dp"
+                    android:fontFamily="@font/allerta"
+                    android:text="Downloaded Content"
                     android:textColor="@color/black"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
 
             </RelativeLayout>
 
@@ -55,5 +58,33 @@
         android:layout_below="@id/appbar"
         android:id="@+id/recycle_view"
         />
+
+    <RelativeLayout
+        android:id="@+id/warningLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        >
+
+        <ImageView
+            android:id="@+id/exclamation_mark"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/exclamation_mark"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            />
+
+        <TextView
+            android:id="@+id/opp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You haven't downloaded any news yet !"
+            android:layout_below="@+id/exclamation_mark"
+            />
+
+    </RelativeLayout>
 
 </RelativeLayout>

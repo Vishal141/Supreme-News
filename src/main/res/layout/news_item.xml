@@ -61,13 +61,27 @@
                     android:text="2021/05/09"
                     app:drawableStartCompat="@drawable/ic_date" />
 
-                <ImageView
-                    android:id="@+id/image_like"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:layout_toLeftOf="@+id/image_download"
-                    android:src="@drawable/ic_thumb_up" />
+                    android:layout_toStartOf="@+id/image_download"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp"
+                    >
+
+                    <ImageView
+                        android:id="@+id/image_like"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_thumb_up"
+                        />
+
+                    <TextView
+                        android:id="@+id/num_likes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
 
                 <ImageView
                     android:id="@+id/image_download"
